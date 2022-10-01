@@ -1,7 +1,16 @@
-# Messaging-app
-Project  chat and video call application 
+# chatt
 
+A new Flutter project.
 
-![Screenshot_1663596480](https://user-images.githubusercontent.com/97079975/193396319-633718a0-356f-48ca-94d3-3a96a9b7a1df.png)
-![Screenshot_1663682807](https://user-images.githubusercontent.com/97079975/193396321-a88ec8ca-b75a-40fc-aff0-b32037bd5302.png)
-![Screenshot_1663730009](https://user-images.githubusercontent.com/97079975/193396328-5f0e035b-baf3-41a0-bba1-afb180fe3071.png)
+## Getting Started
+
+This project is a starting point for a Flutter application.
+
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.
