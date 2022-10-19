@@ -1,27 +1,24 @@
-import 'package:chatt/helper.dart';
-import 'package:chatt/pages/calls_page.dart';
-import 'package:chatt/pages/contacts_page.dart';
-import 'package:chatt/pages/messages_page.dart';
-import 'package:chatt/pages/notifications_page.dart';
-import 'package:chatt/screens/profile_screen.dart';
+import 'package:chatt/screens/screens.dart';
 import 'package:chatt/theme.dart';
-import 'package:chatt/widgets/glowing_action_button.dart';
-import 'package:chatt/widgets/icon_buttons.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../widgets/avatar.dart';
 import 'package:chatt/app.dart';
+import '../pages/calls_page.dart';
+import '../pages/contacts_page.dart';
+import '../pages/messages_page.dart';
+import '../pages/notifications_page.dart';
+import '../widgets/avatar.dart';
+import '../widgets/glowing_action_button.dart';
+import '../widgets/icon_buttons.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatelessWidget {
+  static Route get route => MaterialPageRoute(
+        builder: (context) => HomeScreen(),
+      );
+  HomeScreen({Key? key}) : super(key: key);
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
   final ValueNotifier<int> pageIndex = ValueNotifier(0);
-  final ValueNotifier<String> title = ValueNotifier('Message Page');
+  final ValueNotifier<String> title = ValueNotifier('Messages');
 
   final pages = const [
     MessagesPage(),
@@ -30,7 +27,12 @@ class _HomeScreenState extends State<HomeScreen> {
     ContactsPage(),
   ];
 
-  final pageTitles = const ['Messages', 'Notifications', 'Calls', 'Contacts'];
+  final pageTitles = const [
+    'Messages',
+    'Notifications',
+    'Calls',
+    'Contacts',
+  ];
 
   void _onNavigationItemSelected(index) {
     title.value = pageTitles[index];
@@ -41,23 +43,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        iconTheme: Theme.of(context).iconTheme,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
         title: ValueListenableBuilder(
           valueListenable: title,
-          builder: (BuildContext context, String value, _) {
-            //need to wrap with the center
-            return Center(
-              child: Text(
-                value,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                ),
-              ),
-            );
-          },
+          builder: (BuildContext context, String value, _) => Text(value),
         ),
         leadingWidth: 54,
         leading: Align(
@@ -65,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: IconBackground(
             icon: Icons.search,
             onTap: () {
-              print('to do search ');
+              logger.i('TODO search');
             },
           ),
         ),
@@ -81,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
               ),
             ),
-          )
+          ),
         ],
       ),
       body: ValueListenableBuilder(
@@ -90,8 +78,9 @@ class _HomeScreenState extends State<HomeScreen> {
           return pages[value];
         },
       ),
-      bottomNavigationBar:
-          _BottomNavigationBar(onItemSelected: _onNavigationItemSelected),
+      bottomNavigationBar: _BottomNavigationBar(
+        onItemSelected: _onNavigationItemSelected,
+      ),
     );
   }
 }
@@ -105,10 +94,10 @@ class _BottomNavigationBar extends StatefulWidget {
   final ValueChanged<int> onItemSelected;
 
   @override
-  State<_BottomNavigationBar> createState() => _BottomNavigationBarState();
+  __BottomNavigationBarState createState() => __BottomNavigationBarState();
 }
 
-class _BottomNavigationBarState extends State<_BottomNavigationBar> {
+class __BottomNavigationBarState extends State<_BottomNavigationBar> {
   var selectedIndex = 0;
 
   void handleItemSelected(int index) {
@@ -135,49 +124,49 @@ class _BottomNavigationBarState extends State<_BottomNavigationBar> {
             children: [
               _NavigationBarItem(
                 index: 0,
-                onTap: handleItemSelected,
-                lable: 'messaging',
+                lable: 'Messages',
                 icon: CupertinoIcons.bubble_left_bubble_right_fill,
                 isSelected: (selectedIndex == 0),
+                onTap: handleItemSelected,
               ),
               _NavigationBarItem(
                 index: 1,
-                onTap: handleItemSelected,
-                lable: 'Notification',
+                lable: 'Notifications',
                 icon: CupertinoIcons.bell_solid,
                 isSelected: (selectedIndex == 1),
+                onTap: handleItemSelected,
               ),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: GlowingActionButton(
-                    color: AppColors.secondary,
-                    icon: CupertinoIcons.add,
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) => const Dialog(
-                          child: AspectRatio(
-                            aspectRatio: 8 / 7,
-                            child: ContactsPage(),
-                          ),
+                  color: AppColors.secondary,
+                  icon: CupertinoIcons.add,
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) => const Dialog(
+                        child: AspectRatio(
+                          aspectRatio: 8 / 7,
+                          child: ContactsPage(),
                         ),
-                      );
-                    }),
+                      ),
+                    );
+                  },
+                ),
               ),
               _NavigationBarItem(
                 index: 2,
-                onTap: handleItemSelected,
                 lable: 'Calls',
                 icon: CupertinoIcons.phone_fill,
                 isSelected: (selectedIndex == 2),
+                onTap: handleItemSelected,
               ),
               _NavigationBarItem(
                 index: 3,
-                onTap: handleItemSelected,
                 lable: 'Contacts',
                 icon: CupertinoIcons.person_2_fill,
                 isSelected: (selectedIndex == 3),
+                onTap: handleItemSelected,
               ),
             ],
           ),
@@ -190,9 +179,9 @@ class _BottomNavigationBarState extends State<_BottomNavigationBar> {
 class _NavigationBarItem extends StatelessWidget {
   const _NavigationBarItem({
     Key? key,
+    required this.index,
     required this.lable,
     required this.icon,
-    required this.index,
     this.isSelected = false,
     required this.onTap,
   }) : super(key: key);
@@ -212,27 +201,27 @@ class _NavigationBarItem extends StatelessWidget {
       },
       child: SizedBox(
         width: 70,
-        height: 70,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
               icon,
-              size: 20,
+              size: 22,
               color: isSelected ? AppColors.secondary : null,
             ),
             const SizedBox(
               height: 8,
             ),
-            Text(lable,
-                style: isSelected
-                    ? const TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.secondary)
-                    : const TextStyle(
-                        fontSize: 11,
-                      )),
+            Text(
+              lable,
+              style: isSelected
+                  ? const TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.secondary,
+                    )
+                  : const TextStyle(fontSize: 11),
+            ),
           ],
         ),
       ),
