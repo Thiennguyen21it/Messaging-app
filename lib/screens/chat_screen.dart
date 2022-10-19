@@ -1,18 +1,16 @@
+import 'dart:async';
 import 'package:chatt/app.dart';
-import 'package:chatt/helper.dart';
+import 'package:collection/collection.dart' show IterableExtension;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:stream_chat_flutter_core/stream_chat_flutter_core.dart';
+import '../helper.dart';
 import '../theme.dart';
 import '../widgets/avatar.dart';
 import '../widgets/display_error_message.dart';
 import '../widgets/glowing_action_button.dart';
 import '../widgets/icon_buttons.dart';
-import 'dart:async';
-
-// ignore: depend_on_referenced_packages
-import 'package:collection/collection.dart' show IterableExtension;
 
 class ChatScreen extends StatefulWidget {
   static Route routeWithChannel(Channel channel) => MaterialPageRoute(
@@ -27,12 +25,12 @@ class ChatScreen extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _ChatScreenState createState() => _ChatScreenState();
+  State<ChatScreen> createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
   late StreamSubscription<int> unreadCountSubscription;
-  
+
   @override
   void initState() {
     super.initState();
@@ -62,10 +60,6 @@ class _ChatScreenState extends State<ChatScreen> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         appBar: AppBar(
-          iconTheme: Theme.of(context).iconTheme,
-          centerTitle: false,
-          backgroundColor: Colors.transparent,
-          elevation: 0,
           leadingWidth: 54,
           leading: Align(
             alignment: Alignment.centerRight,
@@ -578,21 +572,39 @@ class _ActionBar extends StatefulWidget {
 }
 
 class __ActionBarState extends State<_ActionBar> {
-  final TextEditingController controller = TextEditingController();
+  final StreamMessageInputController controller =
+      StreamMessageInputController();
+
+  Timer? _debounce;
 
   Future<void> _sendMessage() async {
     if (controller.text.isNotEmpty) {
-      StreamChannel.of(context)
-          .channel
-          .sendMessage(Message(text: controller.text));
+      StreamChannel.of(context).channel.sendMessage(controller.message);
       controller.clear();
       FocusScope.of(context).unfocus();
     }
   }
 
+  void _onTextChange() {
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+    _debounce = Timer(const Duration(seconds: 1), () {
+      if (mounted) {
+        StreamChannel.of(context).channel.keyStroke();
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    controller.addListener(_onTextChange);
+  }
+
   @override
   void dispose() {
+    controller.removeListener(_onTextChange);
     controller.dispose();
+
     super.dispose();
   }
 
@@ -623,9 +635,9 @@ class __ActionBarState extends State<_ActionBar> {
             child: Padding(
               padding: const EdgeInsets.only(left: 16.0),
               child: TextField(
-                controller: controller,
+                controller: controller.textEditingController,
                 onChanged: (val) {
-                  StreamChannel.of(context).channel.keyStroke();
+                  controller.text = val;
                 },
                 style: const TextStyle(fontSize: 14),
                 decoration: const InputDecoration(
