@@ -20,9 +20,9 @@ This project use stream api for chat function
 
  And use firebase to authentication
  - [ https://firebase.flutter.dev/docs/in-app-messaging/overview/?fbclid=IwAR31afiAbp5KDYUzEruS9w_jNONuZX1SP6lSooKm_N7E_wZY2mt9vMNtK8U ] 
- 
+ <ul>
 <li>![Screenshot_1663682807](https://user-images.githubusercontent.com/97079975/193396569-ac0f5ab7-62d0-43c4-b834-b4d87ef9ea3e.png) </li>
 <li>![Screenshot_1663730009](https://user-images.githubusercontent.com/97079975/193396573-003d041c-db12-4ae9-8abf-8db08842eb74.png)</li>
 <li>![Screenshot_1663730032](https://user-images.githubusercontent.com/97079975/193396578-6137c36a-9820-454b-ade5-fa66753adf72.png)</li>
-
+</ul>
 
