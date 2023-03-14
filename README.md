@@ -1,4 +1,4 @@
-# Tmess-app
+# Chat App
 
 A new Flutter project.
 
